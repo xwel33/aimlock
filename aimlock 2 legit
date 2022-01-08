@@ -1,5 +1,5 @@
 -- // Dependencies
-local Aiming = loadstring(game:HttpGet("https://raw.githubusercontent.com/xwel33/aimlock/main/aimlock2"))()
+local Aiming = loadstring(game:HttpGet("https://raw.githubusercontent.com/xwel33/aimlock/main/aimlock%20legit"))()
 Aiming.TeamCheck(false)
 
 -- // Services

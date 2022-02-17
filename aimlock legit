@@ -38,13 +38,13 @@ getgenv().Aiming = {
     Enabled = true,
 
     ShowFOV = false,
-    FOV = 5,
+    FOV = 10,
     FOVSides = 25,
     FOVColour = Color3fromRGB(255, 255, 255),
 
     VisibleCheck = true,
     
-    HitChance = 60,
+    HitChance = 70,
 
     Selected = nil,
     SelectedPart = nil,

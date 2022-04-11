@@ -13,7 +13,7 @@ local LocalPlayer = Players.LocalPlayer
 local CurrentCamera = Workspace.CurrentCamera
 
 local DaHoodSettings = {
-    Prediction = 0.165,
+    Prediction = 0,
 
     SilentAim = true,
 

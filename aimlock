@@ -48,7 +48,7 @@ local Aiming = {
 
     VisibleCheck = true,
 
-    HitChance = 100,
+    HitChance = 70,
 
     Selected = nil,
     SelectedPart = nil,

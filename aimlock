@@ -41,7 +41,7 @@ local GetMouseLocation = UserInputService.GetMouseLocation
 local Aiming = {
     Enabled = true,
 
-    ShowFOV = true,
+    ShowFOV = false,
     FOV = 10,
     FOVSides = 12,
     FOVColour = Color3fromRGB(231, 84, 128),

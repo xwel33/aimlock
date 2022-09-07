@@ -6,7 +6,7 @@ local Workspace = game:GetService("Workspace")
 local GuiService = game:GetService("GuiService")
 local RunService = game:GetService("RunService")
 
--- GetService v2
+-- // GetService v2
 local GetService =
     setmetatable(
     {},
@@ -49,7 +49,9 @@ getgenv().Aiming = {
     Enabled = true,
     
     Resolver = false,
+    
     Notify = false,
+    
     Keybind = "v",
     
     ShowFOV = false,

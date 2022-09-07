@@ -49,6 +49,8 @@ getgenv().Aiming = {
     Enabled = true,
     
     Resolver = false,
+    Notify = false,
+    Keybind = "v",
     
     ShowFOV = false,
     FOV = 119,

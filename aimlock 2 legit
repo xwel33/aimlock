@@ -451,7 +451,6 @@ local RunService = GetService.RunService
             if Aiming.Resolver == true then
                 target = Aiming.Selected
                 targetplr = tostring(target)
-                print(targetplr)
                 pcall(function () -- yes i stole this lol
                     local niggercar = game.Players[targetplr].Character.HumanoidRootPart.Velocity
                     game.Players[targetplr].Character.HumanoidRootPart.Velocity = Vector3.new(0, -0.000000000000000000000000000000001, niggercar.Z)

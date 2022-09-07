@@ -12,7 +12,7 @@ local CurrentCamera = Workspace.CurrentCamera
 
 local DaHoodSettings = {
     SilentAim = true,
-    AimLock = true,
+    AimLock = false,
     Prediction = 0.14,
     AimLockKeybind = Enum.KeyCode.E
 }

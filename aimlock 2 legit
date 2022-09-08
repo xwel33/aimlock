@@ -37,11 +37,12 @@ local tableinsert = table.insert
 getgenv().Aiming = {
     Enabled = true,
     
+    enablekeybind = false,
+    
     UndergroundResolver = false,
     KeybindResolver = "x",
     
     Notify = false,
-    
     Keybind = "v",
     
     ShowFOV = false,

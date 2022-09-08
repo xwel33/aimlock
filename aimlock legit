@@ -1,20 +1,9 @@
 local Aiming = loadstring(game:HttpGet("https://raw.githubusercontent.com/xwel33/aimlock/main/aimlock%202%20legit"))()
 Aiming.TeamCheck(false)
 
--- // GetService v2
-local GetService =
-    setmetatable(
-    {},
-    {
-        __index = function(self, key)
-            return game:GetService(key)
-        end
-    }
-)
-
 local Workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
+
 local UserInputService = game:GetService("UserInputService")
 local RunService = GetService.RunService
 local LocalPlayer = Players.LocalPlayer
@@ -52,19 +41,6 @@ __index = hookmetamethod(game, "__index", function(t, k)
 
         if (DaHoodSettings.SilentAim and (k == "Hit" or k == "Target")) then
             local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * DaHoodSettings.Prediction)
- -- // resolver function
-    RunService.RenderStepped:Connect(function()
-            if Aiming.Resolver == true then
-                target = Aiming.Selected
-                targetplr = tostring(target)
-				local SelectedPart = Aiming.TargetPart
-				print(SelectedPart)
-                pcall(function () -- yes i stole this lol
-                    local niggercar = game.Players[targetplr].Character.SelectedPart.Velocity
-                    game.Players[targetplr].Character.SelectedPart.Velocity = Vector3.new(1110, -110.000000000000000000000000000000001, niggercar.Z)
-                end)
-            end
-    end)
             return (k == "Hit" and Hit or SelectedPart)
         end
     end

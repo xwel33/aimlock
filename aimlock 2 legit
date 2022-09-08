@@ -6,17 +6,6 @@ local Workspace = game:GetService("Workspace")
 local GuiService = game:GetService("GuiService")
 local RunService = game:GetService("RunService")
 
--- // GetService v2
-local GetService =
-    setmetatable(
-    {},
-    {
-        __index = function(self, key)
-            return game:GetService(key)
-        end
-    }
-)
-
 -- // Vars
 local Heartbeat = RunService.Heartbeat
 local LocalPlayer = Players.LocalPlayer

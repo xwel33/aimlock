@@ -38,6 +38,7 @@ getgenv().Aiming = {
     Enabled = true,
     
     UndergroundResolver = false,
+    KeybindResolver = "x",
     
     Notify = false,
     

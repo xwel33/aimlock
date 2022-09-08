@@ -1,11 +1,22 @@
 local Aiming = loadstring(game:HttpGet("https://raw.githubusercontent.com/xwel33/aimlock/main/aimlock%202%20legit"))()
 Aiming.TeamCheck(false)
 
+-- // GetService v2
+local GetService =
+    setmetatable(
+    {},
+    {
+        __index = function(self, key)
+            return game:GetService(key)
+        end
+    }
+)
+
 local Workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
-
+local RunService = GetService.RunService
 local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
 local CurrentCamera = Workspace.CurrentCamera

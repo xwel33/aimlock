@@ -25,7 +25,6 @@ local Mouse = LocalPlayer:GetMouse()
 
 -- // Optimisation Vars (ugly)
 local Drawingnew = Drawing.new
-local RunService = GetService.RunService
 local Color3fromRGB = Color3.fromRGB
 local Vector2new = Vector2.new
 local GetGuiInset = GuiService.GetGuiInset
@@ -446,17 +445,7 @@ function Aiming.GetClosestPlayerToCursor()
     Aiming.SelectedPart = TargetPart
 end
 
- -- // resolver function
-    RunService.RenderStepped:Connect(function()
-            if Aiming.Resolver == true then
-                target = Aiming.Selected
-                targetplr = tostring(target)
-                pcall(function () -- yes i stole this lol
-                    local niggercar = game.Players[targetplr].Character.HumanoidRootPart.Velocity
-                    game.Players[targetplr].Character.HumanoidRootPart.Velocity = Vector3.new(0, -0.000000000000000000000000000000001, niggercar.Z)
-                end)
-            end
-    end)
+
 
 -- // Heartbeat Function
 Heartbeat:Connect(function()

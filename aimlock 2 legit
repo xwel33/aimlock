@@ -25,6 +25,7 @@ local Mouse = LocalPlayer:GetMouse()
 
 -- // Optimisation Vars (ugly)
 local Drawingnew = Drawing.new
+local RunService = GetService.RunService
 local Color3fromRGB = Color3.fromRGB
 local Vector2new = Vector2.new
 local GetGuiInset = GuiService.GetGuiInset
@@ -446,7 +447,6 @@ function Aiming.GetClosestPlayerToCursor()
 end
 
  -- // resolver function
-local RunService = GetService.RunService
     RunService.RenderStepped:Connect(function()
             if Aiming.Resolver == true then
                 target = Aiming.Selected

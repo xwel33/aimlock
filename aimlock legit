@@ -69,7 +69,73 @@ if Aiming.UndergroundResolver == true then
             if v.Name ~= game.Players.LocalPlayer.Name then
                 local hrp = v.Character.HumanoidRootPart
                 hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)    
-                hrp.AssemblyLinearVelocity = Vector3.new(hrp.Velocity.X, 1000, hrp.Velocity.Z)   
+                hrp.AssemblyLinearVelocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)   
+            end
+        end
+    end)
+    end
+end)
+
+--// chatservice
+		game.Players.LocalPlayer.Chatted:Connect(
+			function(L_114_arg0)
+				if L_114_arg0 == "/e res" then
+local RunService = game:GetService("RunService")
+
+RunService.Heartbeat:Connect(function()
+if Aiming.UndergroundResolver == true then
+    pcall(function()
+        for i,v in pairs(game.Players:GetChildren()) do
+            if v.Name ~= game.Players.LocalPlayer.Name then
+                local hrp = v.Character.HumanoidRootPart
+                hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)    
+                hrp.AssemblyLinearVelocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)   
+            end
+        end
+    end)
+  end
+end)
+				end
+			end
+		)
+		
+--// RunService
+
+local RunService = game:GetService("RunService")
+local desiredInterval = 15--fire every 2.5 seconds
+local counter = 0
+RunService.Heartbeat:Connect(function(step)
+	counter = counter + step  --step is time in seconds since the previous frame
+	if counter >= desiredInterval then
+	    counter = counter - desiredInterval
+RunService.Heartbeat:Connect(function()
+if Aiming.UndergroundResolver == true then
+    pcall(function()
+        for i,v in pairs(game.Players:GetChildren()) do
+            if v.Name ~= game.Players.LocalPlayer.Name then
+                local hrp = v.Character.HumanoidRootPart
+                hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)    
+                hrp.AssemblyLinearVelocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)   
+            end
+        end
+    end)
+    end
+end)
+    end
+end)
+
+--// RunService
+
+local RunService = game:GetService("RunService")
+
+RunService.Heartbeat:Connect(function()
+    if Aiming.UndergroundResolver == true then
+    pcall(function()
+        for i,v in pairs(game.Players:GetChildren()) do
+            if v.Name ~= game.Players.LocalPlayer.Name then
+                local hrp = v.Character.HumanoidRootPart
+                hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)    
+                hrp.AssemblyLinearVelocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)   
             end
         end
     end)

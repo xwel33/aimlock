@@ -1,0 +1,664 @@
+local Service = setmetatable({}, {
+    __index = function(t, k)
+        return game:GetService(k)
+    end
+})
+
+local RunService = Service.RunService
+local Players = Service.Players
+local LocalPlayer = Players.LocalPlayer
+local UIs = Service.UserInputService
+local TweenService = Service.TweenService
+local CurrentCamera = workspace.CurrentCamera
+local Mouse = LocalPlayer:GetMouse()
+local CoreGui = Service.CoreGui
+local GuiInset = Service.GuiService:GetGuiInset()
+local Settings = getgenv().Settings
+local AnchorCount = 0
+local MaxAnchor = 50
+local CC = game:GetService"Workspace".CurrentCamera
+local Plr;
+local enabled = false
+local accomidationfactor = 0.139
+local mouse = game.Players.LocalPlayer:GetMouse()
+local CurrentCamera = game:GetService("Workspace").CurrentCamera
+local oldselectedpart = Settings.Targetaim.SELECTEDPART
+local placemarker = Instance.new("Part", game.Workspace)
+local CurrentCamera = game:GetService("Workspace").CurrentCamera;
+local Inset = game:GetService("GuiService"):GetGuiInset().Y;
+local Mouse2 = game:GetService"Players".LocalPlayer:GetMouse();
+local Line = Drawing.new("Line");
+local Circle = Drawing.new("Circle");
+local LocalHL = Instance.new("Highlight")
+
+function makemarker(Parent, Adornee, Color, Size, Size2)
+	local e = Instance.new("BillboardGui", Parent)
+	e.Name = "PP"
+	e.Adornee = Adornee
+	e.Size = UDim2.new(Size, Size2, Size, Size2)
+	e.AlwaysOnTop = Settings.Visual.DOT
+	local a = Instance.new("Frame", e)
+	if Settings.Visual.DOT == true then
+		a.Size = UDim2.new(Settings.Visual.SIZE, 0, Settings.Visual.SIZE, 0)
+	else
+		a.Size = UDim2.new(0, 0, 0, 0)
+	end
+	if Settings.Visual.DOT == true then
+		a.Transparency = 0
+		a.BackgroundTransparency = 0
+	else
+		a.Transparency = 1
+		a.BackgroundTransparency = 1
+	end
+	a.BackgroundColor3 = Color
+	local g = Instance.new("UICorner", a)
+	if Settings.Visual.DOT == false then
+		g.CornerRadius = UDim.new(0, 0)
+	else
+		g.CornerRadius = UDim.new(1, 1) 
+	end
+	return(e)
+end
+
+
+local data = game.Players:GetPlayers()
+function noob(player)
+	local character
+	repeat wait() until player.Character
+	local handler = makemarker(guimain, player.Character:WaitForChild(Settings.Targetaim.SELECTEDPART), Color3.fromRGB(98, 37, 209), 0.3, 3)
+	handler.Name = player.Name
+	player.CharacterAdded:connect(function(Char) handler.Adornee = Char:WaitForChild(Settings.Targetaim.SELECTEDPART) end)
+
+
+	spawn(function()
+		while wait() do
+			if player.Character then
+			end
+		end
+	end)
+end
+
+for i = 1, #data do
+	if data[i] ~= game.Players.LocalPlayer then
+		noob(data[i])
+	end
+end
+
+if not pcall(function() return syn.protect_gui end) then
+    syn = {}
+    syn.protect_gui = function(gui)
+        gui.Parent = CoreGui
+    end
+end
+
+local MainGui = Instance.new("ScreenGui")
+MainGui.Name = "VaultsUI"
+MainGui.Parent = CoreGui
+MainGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+syn.protect_gui(MainGui)
+
+local Meffsolset2 = {
+    Round = function(num, numDecimalPlaces)
+        return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
+    end
+}
+
+
+
+game.Players.PlayerAdded:connect(function(Player)
+	noob(Player)
+end)
+
+spawn(function()
+	placemarker.Anchored = true
+	placemarker.CanCollide = false
+	if Settings.Visual.BOX == true then
+		placemarker.Size = Vector3.new(8, 8, 8)
+	else
+		placemarker.Size = Vector3.new(0, 0, 0)
+	end
+	placemarker.Transparency = 0.85
+	if Settings.Visual.DOT then
+		makemarker(placemarker, placemarker, Settings.Visual.COLOR, 0.40, 0)
+	end
+end)
+
+game.Players.LocalPlayer:GetMouse().KeyDown:Connect(function(k)
+	if k == Settings.Targetaim.KEY and Settings.Targetaim.ENABLED then
+		if enabled == true then
+			enabled = false
+            if Settings.Targetaim.SOUND == true then
+                local benlocked = Instance.new("Sound")
+                benlocked.Name = "e"
+                benlocked.Volume = 1
+                benlocked.SoundId = "rbxassetid://6518811702"
+                benlocked.Parent = game:GetService("SoundService")
+                benlocked.Playing = true
+            end
+			if Settings.Targetaim.NOTIF == true then
+				Plr = getClosestPlayerToCursor()
+				game.StarterGui:SetCore("SendNotification", {
+					Title = "Meff.sol V2";
+					Text = "Unlocked",
+					Icon = "rbxassetid://9419289467",
+					Duration = 5
+				})
+			end
+            if Settings.Visual.HIGHLIGHT == true then
+                LocalHL.Parent = game.CoreGui
+            end
+    		if Settings.Targetaim.VIEW == true then
+    			workspace.CurrentCamera.CameraSubject = game.Players.LocalPlayer.Character.Humanoid
+    		end
+		else
+			Plr = getClosestPlayerToCursor()
+			enabled = true
+            if Settings.Targetaim.SOUND == true then
+                local benlocked = Instance.new("Sound")
+                benlocked.Name = "e"
+                benlocked.Volume = 1
+                benlocked.SoundId = "rbxassetid://6518811702"
+                benlocked.Parent = game:GetService("SoundService")
+                benlocked.Playing = true
+            end
+			if Settings.Targetaim.NOTIF == true then
+				game.StarterGui:SetCore("SendNotification", {
+					Title = "Meff.sol V2";
+					Text = "Target: "..tostring(Plr.Character.Humanoid.DisplayName),
+					Icon = "rbxassetid://4400070053",
+                    Icon = "rbxthumb://type=AvatarHeadShot&id=" .. tostring(Plr.UserId) .. "&w=420&h=420",
+					Duration = 5
+				})
+			end
+            if enabled and Settings.Visual.HIGHLIGHT == true and Plr.Character ~= nil and Plr.Character:FindFirstChild("HumanoidRootPart") then
+                LocalHL.Parent = Plr.Character
+                LocalHL.FillColor = Settings.Visual.HIGHLIGHTCOLOR1
+                LocalHL.OutlineColor = Settings.Visual.HIGHLIGHTCOLOR2
+            end
+			if Settings.Targetaim.VIEW == true then
+                if Plr.Character:FindFirstChild("Humanoid") then
+                        workspace.CurrentCamera.CameraSubject = Plr.Character.Humanoid
+                end
+            end
+		end
+	end
+end)
+
+
+if game.PlaceId == 2788229376 then
+function getClosestPlayerToCursor()
+	local closestPlayer
+	local shortestDistance = Settings.Targetaim.FOV
+
+	for i, v in pairs(game.Players:GetPlayers()) do
+        local ISNTKNOCKED = v.Character:WaitForChild("BodyEffects")["K.O"].Value ~= true
+        local ISNTGRABBED = v.Character:FindFirstChild("GRABBING_COINSTRAINT") == nil
+            if ISNTKNOCKED or ISNTGRABBED then
+        		if v ~= game.Players.LocalPlayer and v.Character and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health ~= 0 and v.Character:FindFirstChild("HumanoidRootPart") then
+        			local pos = CC:WorldToViewportPoint(v.Character.PrimaryPart.Position)
+        			local magnitude = (Vector2.new(pos.X, pos.Y) - Vector2.new(mouse.X, mouse.Y)).magnitude
+        			if magnitude < shortestDistance then
+        				closestPlayer = v
+        				shortestDistance = magnitude
+        			end
+        		end
+            end
+        end
+	return closestPlayer
+end
+else
+    function getClosestPlayerToCursor()
+        local closestPlayer
+        local shortestDistance = Settings.Targetaim.FOV
+    
+        for i, v in pairs(game.Players:GetPlayers()) do
+            if v ~= game.Players.LocalPlayer and v.Character and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health ~= 0 and v.Character:FindFirstChild("HumanoidRootPart") then
+                local pos = CC:WorldToViewportPoint(v.Character.PrimaryPart.Position)
+                local magnitude = (Vector2.new(pos.X, pos.Y) - Vector2.new(mouse.X, mouse.Y)).magnitude
+                if magnitude < shortestDistance then
+                    closestPlayer = v
+                    shortestDistance = magnitude
+                end
+            end
+        end
+        return closestPlayer
+    end
+end
+
+local pingvalue = nil;
+local split = nil;
+local ping = nil;
+
+game:GetService"RunService".Stepped:connect(function()
+	if enabled and Settings.Targetaim.ENABLED and Plr.Character ~= nil and Plr.Character:FindFirstChild("HumanoidRootPart") then
+		placemarker.CFrame = CFrame.new(Plr.Character.HumanoidRootPart.Position+(Plr.Character.HumanoidRootPart.Velocity*accomidationfactor))
+	else
+		placemarker.CFrame = CFrame.new(0, 9999, 0)
+	end
+    
+	if Settings.Targetaim.AUTOPRED == true then
+		pingvalue = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
+		split = string.split(pingvalue,'(')
+		ping = tonumber(split[1])
+		if ping < 130 then
+			Settings.Targetaim.PREDICTIONVALUE = 0.151
+		elseif ping < 125 then
+			Settings.Targetaim.PREDICTIONVALUE = 0.149
+		elseif ping < 110 then
+			Settings.Targetaim.PREDICTIONVALUE = 0.146
+		elseif ping < 105 then
+			Settings.Targetaim.PREDICTIONVALUE = 0.138
+		elseif ping < 90 then
+			Settings.Targetaim.PREDICTIONVALUE = 0.136
+		elseif ping < 80 then
+			Settings.Targetaim.PREDICTIONVALUE = 0.134
+		elseif ping < 70 then
+			Settings.Targetaim.PREDICTIONVALUE = 0.131
+		elseif ping < 60 then
+			Settings.Targetaim.PREDICTIONVALUE = 0.1229
+		elseif ping < 50 then
+			Settings.Targetaim.PREDICTIONVALUE = 0.1225
+		elseif ping < 40 then
+			Settings.Targetaim.PREDICTIONVALUE = 0.1256
+		end
+	end
+end)
+
+local mt = getrawmetatable(game)
+local old = mt.__namecall
+setreadonly(mt, false)
+mt.__namecall = newcclosure(function(...)
+	local args = {...}
+	if enabled and getnamecallmethod() == "FireServer" and args[2] == "UpdateMousePos" and Settings.Targetaim.ENABLED and Plr.Character ~= nil then
+
+		-- args[3] = Plr.Character.HumanoidRootPart.Position+(Plr.Character.HumanoidRootPart.Velocity*accomidationfactor)
+            --[[
+            if Settings.Targetaim.AIRSHOT == true then
+                if game.Workspace.Players[Plr.Name].Humanoid:GetState() == Enum.HumanoidStateType.Freefall then -- Plr.Character:WaitForChild("Humanoid"):GetState() == Enum.HumanoidStateType.Freefall
+                    
+                    --// Airshot
+                    args[3] = Plr.Character.LeftFoot.Position+(Plr.Character.LeftFoot.Velocity*Settings.Targetaim.PREDICTIONVALUE)
+
+                else
+                    args[3] = Plr.Character.HumanoidRootPart.Position+(Plr.Character.HumanoidRootPart.Velocity*Settings.Targetaim.PREDICTIONVALUE)
+
+                end
+            else
+                    args[3] = Plr.Character.HumanoidRootPart.Position+(Plr.Character.HumanoidRootPart.Velocity*Settings.Targetaim.PREDICTIONVALUE)
+            end
+            ]]
+		if Settings.Targetaim.PREDICTION == true then
+
+			args[3] = Plr.Character[Settings.Targetaim.SELECTEDPART].Position+(Plr.Character[Settings.Targetaim.SELECTEDPART].Velocity*Settings.Targetaim.PREDICTIONVALUE)
+
+		else
+
+			args[3] = Plr.Character[Settings.Targetaim.SELECTEDPART].Position
+
+		end
+
+		return old(unpack(args))
+	end
+	return old(...)
+end)
+
+game:GetService("RunService").RenderStepped:Connect(function()
+    if enabled and Settings.Targetaim.ENABLED and game.Players.LocalPlayer.Character ~= nil and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        if Settings.Targetaim.DISABLEONPLAYERDEATH then
+            if game.Players.LocalPlayer.Character.Humanoid.health < 1 then
+                if enabled == true then
+                    enabled = false 
+                    if Settings.Visual.HIGHLIGHT == true then
+                        LocalHL.Parent = game.CoreGui
+                    end
+                    if Line.Visible == true or Circle.Visible == true then
+                        Line.Visible = false
+                        Circle.Visible = false
+                    end
+                end
+            end
+        end
+    end
+    if enabled and Settings.Targetaim.ENABLED and Plr.Character ~= nil and Plr.Character:FindFirstChild("HumanoidRootPart") then
+        if Settings.Targetaim.DISABLEONTARGETDEATH then
+            if Plr.Character.Humanoid.health < 1 then
+                if enabled == true then
+                    enabled = false 
+                    if Settings.Visual.HIGHLIGHT == true then
+                        LocalHL.Parent = game.CoreGui
+                    end
+                    if Line.Visible == true or Circle.Visible == true then
+                        Line.Visible = false
+                        Circle.Visible = false
+                    end
+                end
+            end
+        end
+    end
+end)
+
+game:GetService("RunService").RenderStepped:Connect(function()
+    if Settings.Targetaim.RESOVLER and enabled and Settings.Targetaim.ENABLED and Plr.Character ~= nil and Plr.Character:FindFirstChild("HumanoidRootPart")then
+        pcall(function ()
+            local niggercar = Plr.Character.HumanoidRootPart.Velocity
+            Plr.Character.HumanoidRootPart.Velocity = Vector3.new(niggercar.X, -0.000000000000000000000000000000001, niggercar.Z)
+        end)
+    end
+    if enabled and Settings.Targetaim.ENABLED and Plr.Character ~= nil and Plr.Character:FindFirstChild("HumanoidRootPart") then
+        local Vector = CurrentCamera:WorldToViewportPoint(Plr.Character[Settings.Targetaim.SELECTEDPART].Position +
+                                                            (Plr.Character[Settings.Targetaim.SELECTEDPART].Velocity *
+                                                              Settings.Targetaim.PREDICTIONVALUE))
+        Line.Color = Settings.Visual.COLOR
+        Line.Transparency = Settings.Visual.TRANSPARENCY
+        Line.Thickness = Settings.Visual.THICKNESS
+        Line.Visible = Settings.Visual.LINE
+        Line.From = Vector2.new(Mouse2.X, Mouse2.Y + Inset)
+        Line.To = Vector2.new(Vector.X, Vector.Y)
+        Line.Visible = Settings.Visual.LINE
+        Circle.Position = Vector2.new(Mouse2.X, Mouse2.Y + Inset)
+        Circle.Visible = Settings.Visual.FOV
+        Circle.Thickness = 1.5
+        Circle.Thickness = 2
+        Circle.Radius = 60
+        Circle.Color = Settings.Visual.COLOR
+    else
+        Line.Visible = false
+        Circle.Visible = false
+    end
+    if enabled and Settings.Targetaim.AUTOSHOOT and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
+        mouse1click()
+        task.wait()
+    end
+    if enabled and Settings.Targetaim.LOOKAT and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
+        LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(LocalPlayer.Character.HumanoidRootPart.CFrame.Position, Vector3.new(Plr.Character.HumanoidRootPart.CFrame.X, game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position.Y, Plr.Character.HumanoidRootPart.CFrame.Z))
+        LocalPlayer.Character.Humanoid.AutoRotate = false
+        spawn(function ()
+            if Settings.Targetaim.LOOKAT == false then
+                LocalPlayer.Character.Humanoid.AutoRotate = true
+            end
+        end)
+        else
+            LocalPlayer.Character.Humanoid.AutoRotate = true
+        end
+            if enabled and Settings.Targetaim.FLYMODE and Plr.Character ~= nil and Plr.Character:FindFirstChild("HumanoidRootPart") then
+                for i, v in pairs(LocalPlayer.Character:GetDescendants()) do
+                    if v:IsA("BasePart") and v.CanCollide == true then
+                        v.CanCollide = false
+                    end
+                end
+            end
+            if enabled and Settings.Targetaim.FLYMODE and Plr.Character ~= nil and Plr.Character:FindFirstChild("HumanoidRootPart") then
+                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(Plr.Character.HumanoidRootPart.CFrame.X,Settings.Targetaim.HEIGHT,Plr.Character.HumanoidRootPart.CFrame.Z)
+                        game:GetService('Players').LocalPlayer.Character.HumanoidRootPart.Velocity = game:GetService('Players').LocalPlayer.Character.HumanoidRootPart.CFrame.lookVector * 0
+                        game:GetService("RunService").Stepped:wait()
+            end
+	if Settings.Targetaim.RESOVLER == true and Plr.Character ~= nil and enabled and Settings.Targetaim.ENABLED then
+		if Settings.Targetaim.AIRSHOT == true and enabled and Plr.Character ~= nil then
+
+			if game.Workspace.Players[Plr.Name].Humanoid:GetState() == Enum.HumanoidStateType.Freefall then -- Plr.Character:WaitForChild("Humanoid"):GetState() == Enum.HumanoidStateType.Freefall
+
+				--// Airshot
+
+				--// Anchor Check
+
+				if Plr.Character ~= nil and Plr.Character.HumanoidRootPart.Anchored == true then
+					AnchorCount = AnchorCount + 1
+					if AnchorCount >= MaxAnchor then
+						Prediction = false
+						wait(2)
+						AnchorCount = 0;
+					end
+				else
+					Prediction = true
+					AnchorCount = 0;
+				end
+
+				Settings.Targetaim.SELECTEDPART = Settings.Targetaim.AIRSHOTPART
+
+			else
+				--// Anchor Check
+
+				if Plr.Character ~= nil and Plr.Character.HumanoidRootPart.Anchored == true then
+					AnchorCount = AnchorCount + 1
+					if AnchorCount >= MaxAnchor then
+						Prediction = false
+						wait(2)
+						AnchorCount = 0;
+					end
+				else
+					Prediction = true
+					AnchorCount = 0;
+				end
+
+				Settings.Targetaim.SELECTEDPART = "HumanoidRootPart"
+
+			end
+		else
+
+			--// Anchor Check
+
+			if Plr.Character ~= nil and Plr.Character.HumanoidRootPart.Anchored == true then
+				AnchorCount = AnchorCount + 1
+				if AnchorCount >= MaxAnchor then
+					Prediction = false
+					wait(2)
+					AnchorCount = 0;
+				end
+			else
+				Prediction = true
+				AnchorCount = 0;
+			end
+
+			Settings.Targetaim.SELECTEDPART = "HumanoidRootPart"
+		end
+
+	else
+		Settings.Targetaim.SELECTEDPART = oldselectedpart
+	end
+end)
+
+-- TARGET AIM GUI
+
+local TargetUI = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local Container_2 = Instance.new("Frame")
+local Line_2 = Instance.new("Frame")
+local Profile = Instance.new("ImageButton")
+local HealthBorder = Instance.new("Frame")
+local HealthBar = Instance.new("Frame")
+local UICorner_2 = Instance.new("UICorner")
+local HealthText = Instance.new("TextLabel")
+local HealthIcon = Instance.new("ImageButton")
+local Title_2 = Instance.new("TextLabel")
+local ArmorBorder = Instance.new("Frame")
+local ArmorBar = Instance.new("Frame")
+local UICorner_3 = Instance.new("UICorner")
+local ArmorText = Instance.new("TextLabel")
+local ArmorIcon = Instance.new("ImageButton")
+local UmbraShadow_2 = Instance.new("ImageLabel")
+local AmbientShadow_2 = Instance.new("ImageLabel")
+
+TargetUI.Name = "Target UI"
+TargetUI.Parent = MainGui
+TargetUI.AnchorPoint = Vector2.new(0.5, 0.5)
+TargetUI.BackgroundColor3 = Color3.fromRGB(26, 26, 26)
+TargetUI.BackgroundTransparency = 0.700
+TargetUI.BorderSizePixel = 0
+TargetUI.Position = UDim2.new(0.504575729, 0, 0.787337661, 0)
+TargetUI.Size = UDim2.new(0, 251, 0, 97)
+TargetUI.Visible = false
+
+UICorner.CornerRadius = UDim.new(0, 4)
+UICorner.Parent = TargetUI
+
+Container_2.Name = "Container"
+Container_2.Parent = TargetUI
+Container_2.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
+Container_2.BackgroundTransparency = 0.700
+Container_2.BorderSizePixel = 0
+Container_2.Position = UDim2.new(0.00973401312, 0, 0.027855942, 0)
+Container_2.Size = UDim2.new(0, 248, 0, 94)
+
+Line_2.Name = "Line"
+Line_2.Parent = Container_2
+Line_2.BackgroundColor3 = Color3.fromRGB(4, 192, 1)
+Line_2.BorderSizePixel = 0
+Line_2.Position = UDim2.new(-0.00261220615, 0, -0.00655640941, 0)
+Line_2.Size = UDim2.new(0, 249, 0, 3)
+
+Profile.Name = "Profile"
+Profile.Parent = Container_2
+Profile.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Profile.BackgroundTransparency = 1.000
+Profile.Position = UDim2.new(-0.00427350448, 0, 0.0338983051, 0)
+Profile.Size = UDim2.new(0, 90, 0, 90)
+Profile.AutoButtonColor = false
+Profile.Image = "rbxthumb://type=AvatarHeadShot&id=590180069&w=420&h=420"
+
+HealthBorder.Name = "HealthBorder"
+HealthBorder.Parent = Container_2
+HealthBorder.BackgroundColor3 = Color3.fromRGB(26, 26, 26)
+HealthBorder.BackgroundTransparency = 0.500
+HealthBorder.BorderSizePixel = 0
+HealthBorder.Position = UDim2.new(0.400000006, 0, 0.349999994, 0)
+HealthBorder.Size = UDim2.new(0, 135, 0, 22)
+
+HealthBar.Name = "HealthBar"
+HealthBar.Parent = HealthBorder
+HealthBar.Active = true
+HealthBar.BackgroundColor3 = Color3.fromRGB(7, 215, 0)
+HealthBar.BorderSizePixel = 0
+HealthBar.ClipsDescendants = true
+HealthBar.Position = UDim2.new(0.0220597833, 0, -0.0436026901, 0)
+HealthBar.Size = UDim2.new(1, 0, 1, 0)
+
+UICorner_2.CornerRadius = UDim.new(0, 3)
+UICorner_2.Parent = HealthBar
+
+HealthText.Name = "HealthText"
+HealthText.Parent = HealthBorder
+HealthText.BackgroundColor3 = Color3.fromRGB(118, 118, 118)
+HealthText.BackgroundTransparency = 1.000
+HealthText.Size = UDim2.new(0, 138, 0, 22)
+HealthText.Font = Enum.Font.Roboto
+HealthText.Text = "100"
+HealthText.TextColor3 = Color3.fromRGB(255, 255, 255)
+HealthText.TextSize = 20.000
+
+HealthIcon.Name = "HealthIcon"
+HealthIcon.Parent = HealthBorder
+HealthIcon.BackgroundTransparency = 1.000
+HealthIcon.Position = UDim2.new(0.0900000036, 0, 0.119999997, 0)
+HealthIcon.Size = UDim2.new(0, 15, 0, 15)
+HealthIcon.ZIndex = 2
+HealthIcon.Image = "rbxassetid://3926305904"
+HealthIcon.ImageRectOffset = Vector2.new(964, 444)
+HealthIcon.ImageRectSize = Vector2.new(36, 36)
+
+Title_2.Name = "Title"
+Title_2.Parent = Container_2
+Title_2.BackgroundColor3 = Color3.fromRGB(118, 118, 118)
+Title_2.BackgroundTransparency = 1.000
+Title_2.Position = UDim2.new(0.426879644, 0, 0.0496608652, 0)
+Title_2.Size = UDim2.new(0, 132, 0, 25)
+Title_2.Font = Enum.Font.Roboto
+Title_2.Text = "T_4Q (WetAnimeGirls)"
+Title_2.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title_2.TextScaled = true
+Title_2.TextSize = 20.000
+Title_2.TextWrapped = true
+Title_2.TextXAlignment = Enum.TextXAlignment.Left
+
+ArmorBorder.Name = "ArmorBorder"
+ArmorBorder.Parent = Container_2
+ArmorBorder.BackgroundColor3 = Color3.fromRGB(26, 26, 26)
+ArmorBorder.BackgroundTransparency = 0.500
+ArmorBorder.BorderSizePixel = 0
+ArmorBorder.Position = UDim2.new(0.400000006, 0, 0.649999976, 0)
+ArmorBorder.Size = UDim2.new(0, 135, 0, 22)
+
+ArmorBar.Name = "ArmorBar"
+ArmorBar.Parent = ArmorBorder
+ArmorBar.BackgroundColor3 = Color3.fromRGB(106, 167, 255)
+ArmorBar.BorderSizePixel = 0
+ArmorBar.Position = UDim2.new(0.0220597833, 0, -0.0436026901, 0)
+ArmorBar.Size = UDim2.new(1, 0, 1, 0)
+
+UICorner_3.CornerRadius = UDim.new(0, 3)
+UICorner_3.Parent = ArmorBar
+
+ArmorText.Name = "ArmorText"
+ArmorText.Parent = ArmorBorder
+ArmorText.BackgroundColor3 = Color3.fromRGB(118, 118, 118)
+ArmorText.BackgroundTransparency = 1.000
+ArmorText.Size = UDim2.new(0, 138, 0, 21)
+ArmorText.Font = Enum.Font.Roboto
+ArmorText.Text = "100"
+ArmorText.TextColor3 = Color3.fromRGB(255, 255, 255)
+ArmorText.TextSize = 20.000
+
+ArmorIcon.Name = "ArmorIcon"
+ArmorIcon.Parent = ArmorBorder
+ArmorIcon.BackgroundTransparency = 1.000
+ArmorIcon.Position = UDim2.new(0.0900000036, 0, 0.119999997, 0)
+ArmorIcon.Size = UDim2.new(0, 15, 0, 15)
+ArmorIcon.ZIndex = 2
+ArmorIcon.Image = "rbxassetid://3926307971"
+ArmorIcon.ImageRectOffset = Vector2.new(164, 284)
+ArmorIcon.ImageRectSize = Vector2.new(36, 36)
+
+UmbraShadow_2.Name = "UmbraShadow"
+UmbraShadow_2.Parent = TargetUI
+UmbraShadow_2.AnchorPoint = Vector2.new(0.5, 0.5)
+UmbraShadow_2.BackgroundTransparency = 1.000
+UmbraShadow_2.BorderSizePixel = 0
+UmbraShadow_2.Position = UDim2.new(0.5, 0, 0.5, 6)
+UmbraShadow_2.Size = UDim2.new(1, 10, 1, 10)
+UmbraShadow_2.ZIndex = 0
+UmbraShadow_2.Image = "rbxassetid://1316045217"
+UmbraShadow_2.ImageColor3 = Color3.fromRGB(0, 0, 0)
+UmbraShadow_2.ImageTransparency = 0.850
+UmbraShadow_2.ScaleType = Enum.ScaleType.Slice
+UmbraShadow_2.SliceCenter = Rect.new(10, 10, 118, 118)
+
+AmbientShadow_2.Name = "AmbientShadow"
+AmbientShadow_2.Parent = TargetUI
+AmbientShadow_2.AnchorPoint = Vector2.new(0.5, 0.5)
+AmbientShadow_2.BackgroundTransparency = 1.000
+AmbientShadow_2.BorderSizePixel = 0
+AmbientShadow_2.Position = UDim2.new(0.5, 0, 0.476000011, 3)
+AmbientShadow_2.Size = UDim2.new(1, 5, 1, 5)
+AmbientShadow_2.ZIndex = 0
+AmbientShadow_2.Image = "rbxassetid://1316045217"
+AmbientShadow_2.ImageColor3 = Color3.fromRGB(0, 0, 0)
+AmbientShadow_2.ImageTransparency = 0.500
+AmbientShadow_2.ScaleType = Enum.ScaleType.Slice
+AmbientShadow_2.SliceCenter = Rect.new(10, 10, 118, 118)
+
+game:GetService("RunService").RenderStepped:Connect(function()
+        if Settings.Targetaim.TARGETGUI and enabled and Settings.Targetaim.ENABLED and Plr.Character ~= nil and Plr.Character:FindFirstChild("HumanoidRootPart") then
+                if Plr == nil then
+                Profile.Image = "rbxassetid://9419289467"
+                ArmorText.Text = "Data Not Found!"
+                HealthText.Text = "Data Not Found!"
+                end
+            if enabled and Settings.Targetaim.ENABLED then
+                local NewHealth = Plr.Character.Humanoid.Health / Plr.Character.Humanoid.MaxHealth
+                Profile.Image = "rbxthumb://type=AvatarHeadShot&id=" .. Plr.UserId .. "&w=420&h=420"
+                Title_2.Text = Plr.Name .. " (" .. Plr.DisplayName .. ")"
+                HealthText.Text = Meffsolset2.Round(NewHealth * 100, 2)
+                HealthBar:TweenSize(UDim2.new(NewHealth, 0, 1, 0), "In", "Linear", 0.25)
+                if Plr.Character:FindFirstChild("BodyEffects") and Plr.Character:FindFirstChild("BodyEffects"):FindFirstChild("Armor") then
+                    local NewArmor = Plr.Character.BodyEffects.Armor.Value / 200
+                    ArmorText.Text = Meffsolset2.Round(NewArmor * 100, 2)
+                    ArmorBar:TweenSize(UDim2.new(NewArmor, 0, 1, 0), "In", "Linear", 0.25)
+                else
+                    ArmorText.Text = "Data Not Found!"
+                end
+                TargetUI.Visible = true
+            end
+        else
+            TargetUI.Visible = false
+        end
+        wait(0.35)
+end)

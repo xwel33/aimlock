@@ -86,8 +86,8 @@ if Aiming.DetectDesync == true and Aiming.Selected then
             if Aiming.Character(Aiming.Selected):WaitForChild("HumanoidRootPart").Velocity.magnitude > Aiming.VelocityDetection then
             print("Detected Anti Lock")
                 local hrp = Aiming.Character(Aiming.Selected).HumanoidRootPart
-                hrp.Velocity = Vector3.new(0, 0, 0)    
-                hrp.AssemblyLinearVelocity = Vector3.new(0, 0, 0) 
+                hrp.Velocity = Vector3.new(0, 700, 0)    
+                hrp.AssemblyLinearVelocity = Vector3.new(0, 700, 0) 
         end
         end)
     end

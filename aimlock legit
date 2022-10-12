@@ -83,9 +83,9 @@ local RunService = game:GetService("RunService")
 RunService.Heartbeat:Connect(function()
 if Aiming.DetectDesync == true and Aiming.Selected then
         pcall(function ()
-            if Aiming.Character(Aiming.Selected):WaitForChild("HumanoidRootPart").Velocity.magnitude > Aiming.VelocityDetection then
+            if Aiming.Selected.Character:WaitForChild("HumanoidRootPart").Velocity.magnitude > Aiming.VelocityDetection then
             print("Detected Anti Lock")
-                local hrp = Aiming.Character(Aiming.Selected).HumanoidRootPart
+                local hrp = Aiming.Selected.Character.HumanoidRootPart
                 hrp.Velocity = Vector3.new(0, 700, 0)    
                 hrp.AssemblyLinearVelocity = Vector3.new(0, 700, 0) 
         end

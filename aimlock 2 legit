@@ -43,6 +43,9 @@ getgenv().Aiming = {
     ResolverNotification = false,
     KeybindResolver = "x",
     
+    DetectDesync = false,
+    VelocityDetection = 70,
+    
     Notify = false,
     Keybind = "v",
     

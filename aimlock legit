@@ -60,8 +60,6 @@ __index =
 
 --// Runservice
 
-local RunService = game:GetService("RunService")
-
 RunService.Heartbeat:Connect(
     function()
         if Aiming.UndergroundResolver == true and Aiming.Selected then
@@ -77,8 +75,6 @@ RunService.Heartbeat:Connect(
 )
 
 --// Runservice Desync Detection
-
-local RunService = game:GetService("RunService")
 
 RunService.Heartbeat:Connect(
     function()
@@ -124,9 +120,8 @@ game.Players.LocalPlayer.Chatted:Connect(
 
 --// RunService
 
-local RunService = game:GetService("RunService")
 local desiredInterval = 15
- --fire every 2.5 seconds
+--// fire every 2.5 seconds
 local counter = 0
 RunService.Heartbeat:Connect(
     function(step)
@@ -151,8 +146,6 @@ RunService.Heartbeat:Connect(
 )
 
 --// RunService
-
-local RunService = game:GetService("RunService")
 
 RunService.Heartbeat:Connect(
     function()

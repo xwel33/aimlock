@@ -43,8 +43,6 @@ getgenv().Aiming = {
     ResolverNotification = false,
     KeybindResolver = "x",
     
-    SilentAimMethod = "Raycast",
-    
     DetectDesync = false,
     VelocityDetection = 70,
     

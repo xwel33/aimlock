@@ -40,7 +40,6 @@ __index =
     game,
     "__index",
     function(t, k)
-    if Aiming.SilentAimMethod = "HookMethod" then
         if (t:IsA("Mouse") and (k == "Hit" or k == "Target") and Aiming.Check()) then
             local SelectedPart = Aiming.SelectedPart
 
@@ -57,49 +56,8 @@ __index =
 
         return __index(t, k)
     end
-   end
 )
 
-local function getDirection(Origin, Position)
-    return (Position - Origin).Unit * 1000
-end
--- hooks
-local oldNamecall
-oldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(..., t, k)
-    local Method = getnamecallmethod()
-    local Arguments = {...}
-    local self = Arguments[1]
-    local chance = CalculateChance(SilentAimSettings.HitChance)
-	if (t:IsA("Mouse") and (k == "Hit" or k == "Target") and Aiming.Check()) then
-        if Aiming.SilentAimMethod = "Raycast" then
-                local A_Origin = Arguments[2]
-
-                local HitPart = Aiming.Character(Aiming.Selected)
-                if HitPart then
-                    Arguments[3] = getDirection(A_Origin, HitPart.Position)
-
-                    return oldNamecall(unpack(Arguments))
-            end
-        end
-    end
-    return oldNamecall(...)
-end))
-
---// Runservice
-
-RunService.Heartbeat:Connect(
-    function()
-        if Aiming.UndergroundResolver == true and Aiming.Selected then
-            pcall(
-                function()
-                    local hrp = Aiming.Character(Aiming.Selected).HumanoidRootPart
-                    hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)
-                    hrp.AssemblyLinearVelocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)
-                end
-            )
-        end
-    end
-)
 
 --// Runservice Desync Detection
 

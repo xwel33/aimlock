@@ -39,12 +39,14 @@ __index = hookmetamethod(game, "__index", function(t, k)
     if (t:IsA("Mouse") and (k == "Hit" or k == "Target") and Aiming.Check()) then
         local SelectedPart = Aiming.SelectedPart
 
-        if (DaHoodSettings.SilentAim and (k == "Hit" or k == "Target")) and EnablePrediction == true then
-            local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * DaHoodSettings.Prediction)
-            return (k == "Hit" and Hit or SelectedPart)
+        if (DaHoodSettings.SilentAim and (k == "Hit" or k == "Target")) then
+	   if EnablePrediction == true then
+		local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * DaHoodSettings.Prediction)
+		return (k == "Hit" and Hit or SelectedPart)
 	    else
-	    local Hit = SelectedPart.CFrame
-            return (k == "Hit" and Hit or SelectedPart)
+		local Hit = SelectedPart.CFrame
+		return (k == "Hit" and Hit or SelectedPart)
+	    end
         end
     end
 
@@ -73,7 +75,6 @@ RunService.Heartbeat:Connect(function()
 if Aiming.DetectDesync == true and Aiming.Selected then
 	if Aiming.Character(Aiming.Selected):WaitForChild("HumanoidRootPart").Velocity.magnitude > Aiming.VelocityDetection then
         pcall(function ()
-            print("Detected Anti Lock")
                 local hrp = Aiming.Character(Aiming.Selected).HumanoidRootPart
                 hrp.Velocity = Vector3.new(0, 0, 0)    
                 hrp.AssemblyLinearVelocity = Vector3.new(0, 0, 0) 

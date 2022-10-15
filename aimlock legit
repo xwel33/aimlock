@@ -14,7 +14,7 @@ local CurrentCamera = Workspace.CurrentCamera
 local DaHoodSettings = {
     EnablePrediction = true,
     SilentAim = true,
-    Prediction = 0.14,
+    Prediction = 0.14
 }
 getgenv().DaHoodSettings = DaHoodSettings
 
@@ -35,168 +35,215 @@ function Aiming.Check()
 end
 
 local __index
-__index = hookmetamethod(game, "__index", function(t, k)
-    if (t:IsA("Mouse") and (k == "Hit" or k == "Target") and Aiming.Check()) then
-        local SelectedPart = Aiming.SelectedPart
+__index =
+    hookmetamethod(
+    game,
+    "__index",
+    function(t, k)
+        if (t:IsA("Mouse") and (k == "Hit" or k == "Target") and Aiming.Check()) then
+            local SelectedPart = Aiming.SelectedPart
 
-        if (DaHoodSettings.SilentAim and (k == "Hit" or k == "Target")) then
-	   if EnablePrediction == true then
-		local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * DaHoodSettings.Prediction)
-		return (k == "Hit" and Hit or SelectedPart)
-	    else
-		local Hit = SelectedPart.CFrame
-		return (k == "Hit" and Hit or SelectedPart)
-	    end
+            if (DaHoodSettings.SilentAim and (k == "Hit" or k == "Target")) then
+                if EnablePrediction == true then
+                    local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * DaHoodSettings.Prediction)
+                    return (k == "Hit" and Hit or SelectedPart)
+                else
+                    local Hit = SelectedPart.CFrame
+                    return (k == "Hit" and Hit or SelectedPart)
+                end
+            end
         end
-    end
 
-    return __index(t, k)
-end)
+        return __index(t, k)
+    end
+)
 
 --// Runservice
 
 local RunService = game:GetService("RunService")
 
-RunService.Heartbeat:Connect(function()
-if Aiming.UndergroundResolver == true and Aiming.Selected then
-    pcall(function()
-                local hrp = Aiming.Character(Aiming.Selected).HumanoidRootPart
-                hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)    
-                hrp.AssemblyLinearVelocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)   
-        end)
+RunService.Heartbeat:Connect(
+    function()
+        if Aiming.UndergroundResolver == true and Aiming.Selected then
+            pcall(
+                function()
+                    local hrp = Aiming.Character(Aiming.Selected).HumanoidRootPart
+                    hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)
+                    hrp.AssemblyLinearVelocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)
+                end
+            )
+        end
     end
-end)
+)
 
 --// Runservice Desync Detection
 
 local RunService = game:GetService("RunService")
 
-RunService.Heartbeat:Connect(function()
-if Aiming.DetectDesync == true and Aiming.Selected then
-	if Aiming.Character(Aiming.Selected):WaitForChild("HumanoidRootPart").Velocity.magnitude > Aiming.VelocityDetection then
-        pcall(function ()
-                local hrp = Aiming.Character(Aiming.Selected).HumanoidRootPart
-                hrp.Velocity = Vector3.new(0, 0, 0)    
-                hrp.AssemblyLinearVelocity = Vector3.new(0, 0, 0) 
-            end)
+RunService.Heartbeat:Connect(
+    function()
+        if Aiming.DetectDesync == true and Aiming.Selected then
+            if
+                Aiming.Character(Aiming.Selected):WaitForChild("HumanoidRootPart").Velocity.magnitude >
+                    Aiming.VelocityDetection
+             then
+                pcall(
+                    function()
+                        local hrp = Aiming.Character(Aiming.Selected).HumanoidRootPart
+                        hrp.Velocity = Vector3.new(0, 0, 0)
+                        hrp.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+                    end
+                )
+            end
         end
     end
-end)
+)
 
 --// chatservice
 game.Players.LocalPlayer.Chatted:Connect(
-	function(L_114_arg0)
-		if L_114_arg0 == "/e res" then
-		local RunService = game:GetService("RunService")
+    function(L_114_arg0)
+        if L_114_arg0 == "/e res" then
+            local RunService = game:GetService("RunService")
 
-		RunService.Heartbeat:Connect(function()
-		if Aiming.UndergroundResolver == true and Aiming.Selected then
-		    pcall(function()
-				local hrp = Aiming.Character(Aiming.Selected).HumanoidRootPart
-				hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)    
-				hrp.AssemblyLinearVelocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)   
-		    end)
-		  end
-		end)
-	     end
-	end
+            RunService.Heartbeat:Connect(
+                function()
+                    if Aiming.UndergroundResolver == true and Aiming.Selected then
+                        pcall(
+                            function()
+                                local hrp = Aiming.Character(Aiming.Selected).HumanoidRootPart
+                                hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)
+                                hrp.AssemblyLinearVelocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)
+                            end
+                        )
+                    end
+                end
+            )
+        end
+    end
 )
-		
+
 --// RunService
 
 local RunService = game:GetService("RunService")
-local desiredInterval = 15--fire every 2.5 seconds
+local desiredInterval = 15
+ --fire every 2.5 seconds
 local counter = 0
-RunService.Heartbeat:Connect(function(step)
-	counter = counter + step  --step is time in seconds since the previous frame
-	if counter >= desiredInterval then
-	    counter = counter - desiredInterval
-		RunService.Heartbeat:Connect(function()
-		if Aiming.UndergroundResolver == true and Aiming.Selected then
-		pcall(function()
-                local hrp = Aiming.Character(Aiming.Selected).HumanoidRootPart
-                hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)    
-                hrp.AssemblyLinearVelocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)   
-	       end)
-	    end
-	end)
+RunService.Heartbeat:Connect(
+    function(step)
+        counter = counter + step --step is time in seconds since the previous frame
+        if counter >= desiredInterval then
+            counter = counter - desiredInterval
+            RunService.Heartbeat:Connect(
+                function()
+                    if Aiming.UndergroundResolver == true and Aiming.Selected then
+                        pcall(
+                            function()
+                                local hrp = Aiming.Character(Aiming.Selected).HumanoidRootPart
+                                hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)
+                                hrp.AssemblyLinearVelocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)
+                            end
+                        )
+                    end
+                end
+            )
+        end
     end
-end)
+)
 
 --// RunService
 
 local RunService = game:GetService("RunService")
 
-RunService.Heartbeat:Connect(function()
-    if Aiming.UndergroundResolver == true and Aiming.Selected then
-    pcall(function()
-                local hrp = Aiming.Character(Aiming.Selected).HumanoidRootPart
-                hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)    
-                hrp.AssemblyLinearVelocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)   
-	    end)
+RunService.Heartbeat:Connect(
+    function()
+        if Aiming.UndergroundResolver == true and Aiming.Selected then
+            pcall(
+                function()
+                    local hrp = Aiming.Character(Aiming.Selected).HumanoidRootPart
+                    hrp.Velocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)
+                    hrp.AssemblyLinearVelocity = Vector3.new(hrp.Velocity.X, 0, hrp.Velocity.Z)
+                end
+            )
+        end
     end
-end)
+)
 
 -- // Keybind service
-game:GetService("Players").LocalPlayer:GetMouse().KeyDown:Connect(function(Key)
-    if Aiming.EnableKeybind  == true then
-    if Key == Aiming.Keybind then
-        if Aiming.Enabled then
-            Aiming.Enabled = false
-            if Aiming.Notify == true then
-                game.StarterGui:SetCore("SendNotification", {
-    				Title = "Meff.sol V2";
-    				Text = "Disabled";
-    				Icon = "rbxassetid://9419289467",
-    				Duration = 1
-    			})
-                end 
-        else
-            Aiming.Enabled = true
-            if Aiming.Notify == true then
-                game.StarterGui:SetCore("SendNotification", {
-    				Title = "Meff.sol V2";
-    				Text = "Enabled";
-    				Icon = "rbxassetid://9419289467",
-    				Duration = 1
-    			})
-			end
-            while Toggled and wait() do
-                print("Breaking law and physics :D")
+game:GetService("Players").LocalPlayer:GetMouse().KeyDown:Connect(
+    function(Key)
+        if Aiming.EnableKeybind == true then
+            if Key == Aiming.Keybind then
+                if Aiming.Enabled then
+                    Aiming.Enabled = false
+                    if Aiming.Notify == true then
+                        game.StarterGui:SetCore(
+                            "SendNotification",
+                            {
+                                Title = "Meff.sol V2",
+                                Text = "Disabled",
+                                Icon = "rbxassetid://9419289467",
+                                Duration = 1
+                            }
+                        )
+                    end
+                else
+                    Aiming.Enabled = true
+                    if Aiming.Notify == true then
+                        game.StarterGui:SetCore(
+                            "SendNotification",
+                            {
+                                Title = "Meff.sol V2",
+                                Text = "Enabled",
+                                Icon = "rbxassetid://9419289467",
+                                Duration = 1
+                            }
+                        )
+                    end
+                    while Toggled and wait() do
+                        print("Breaking law and physics :D")
+                    end
+                end
             end
         end
     end
-    end
-end)
+)
 
 -- // Keybind service v2
-game:GetService("Players").LocalPlayer:GetMouse().KeyDown:Connect(function(Key)
-    if Aiming.EnableKeybind  == true then
-    if Key == Aiming.KeybindResolver then
-        if Aiming.UndergroundResolver then
-            Aiming.UndergroundResolver = false
-            if Aiming.ResolverNotification == true then
-                game.StarterGui:SetCore("SendNotification", {
-    				Title = "Meff.sol V2";
-    				Text = "Disabled Resolver";
-    				Icon = "rbxassetid://9419289467",
-    				Duration = 1
-    			})
-                end 
-        else
-            Aiming.UndergroundResolver = true
-            if Aiming.ResolverNotification == true then
-                game.StarterGui:SetCore("SendNotification", {
-    				Title = "Meff.sol V2";
-    				Text = "Enabled Resolver";
-    				Icon = "rbxassetid://9419289467",
-    				Duration = 1
-    			})
-			end
-            while Toggled and wait() do
-                print("Breaking law and physics :D")
+game:GetService("Players").LocalPlayer:GetMouse().KeyDown:Connect(
+    function(Key)
+        if Aiming.EnableKeybind == true then
+            if Key == Aiming.KeybindResolver then
+                if Aiming.UndergroundResolver then
+                    Aiming.UndergroundResolver = false
+                    if Aiming.ResolverNotification == true then
+                        game.StarterGui:SetCore(
+                            "SendNotification",
+                            {
+                                Title = "Meff.sol V2",
+                                Text = "Disabled Resolver",
+                                Icon = "rbxassetid://9419289467",
+                                Duration = 1
+                            }
+                        )
+                    end
+                else
+                    Aiming.UndergroundResolver = true
+                    if Aiming.ResolverNotification == true then
+                        game.StarterGui:SetCore(
+                            "SendNotification",
+                            {
+                                Title = "Meff.sol V2",
+                                Text = "Enabled Resolver",
+                                Icon = "rbxassetid://9419289467",
+                                Duration = 1
+                            }
+                        )
+                    end
+                    while Toggled and wait() do
+                        print("Breaking law and physics :D")
+                    end
+                end
             end
         end
     end
-    end
-end)
+)

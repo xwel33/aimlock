@@ -12,9 +12,9 @@ local LocalPlayer = Players.LocalPlayer
 local CurrentCamera = Workspace.CurrentCamera
 
 local DaHoodSettings = {
+    EnablePrediction = true,
     SilentAim = true,
     Prediction = 0.14,
-    AimLockKeybind = Enum.KeyCode.E
 }
 getgenv().DaHoodSettings = DaHoodSettings
 
@@ -39,8 +39,11 @@ __index = hookmetamethod(game, "__index", function(t, k)
     if (t:IsA("Mouse") and (k == "Hit" or k == "Target") and Aiming.Check()) then
         local SelectedPart = Aiming.SelectedPart
 
-        if (DaHoodSettings.SilentAim and (k == "Hit" or k == "Target")) then
+        if (DaHoodSettings.SilentAim and (k == "Hit" or k == "Target")) and EnablePrediction == true then
             local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * DaHoodSettings.Prediction)
+            return (k == "Hit" and Hit or SelectedPart)
+	    else
+	    local Hit = SelectedPart.CFrame
             return (k == "Hit" and Hit or SelectedPart)
         end
     end

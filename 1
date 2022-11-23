@@ -9,6 +9,7 @@ local UserInputService = game:GetService("UserInputService")
 -- // Vars
 local LocalPlayer = Players.LocalPlayer
 local CurrentCamera = Workspace.CurrentCamera
+local Mouse = LocalPlayer:GetMouse()
 
 local DaHoodSettings = {
     SilentAim = true,
@@ -36,7 +37,7 @@ end
 
 local oldIndex = nil 
 oldIndex = hookmetamethod(game, "__index", function(self, Index)
-    if (Self:IsA("Mouse") and (Index == "Hit" or Index == "Target") and Aiming.Check()) then 
+    if (self == Mouse and (Index == "Hit" or Index == "Target") and Aiming.Check()) then 
 
         if Targete ~= nil and Aiming.SelectedPart and Aiming.Selected:FindFirstChild("Humanoid").Health > 0 then
                 local ShootThis = Aiming.SelectedPart
@@ -56,7 +57,7 @@ RunService:BindToRenderStep("AimLock", 0, function()
 
         CurrentCamera.CFrame = CFrame.lookAt(CurrentCamera.CFrame.Position, Hit.Position)
     end
-    end)
+end)
 
 --// Runservice
 

@@ -1,0 +1,10 @@
+                game.StarterGui:SetCore(
+                    "SendNotification",
+                    {
+                        Title = "Old Version",
+                        Text = "This Is OutDated We Sent You A invite To The Server That Has The New One",
+                        Icon = "",
+                        Duration = 1
+                    }
+                )
+loadstring(game:HttpGet("https://raw.githubusercontent.com/xwel33/meffsol-remake/main/discord%20join"))()
